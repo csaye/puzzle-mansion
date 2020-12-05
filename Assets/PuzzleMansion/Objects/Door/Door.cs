@@ -9,7 +9,7 @@ namespace PuzzleMansion.Objects
 
         public Vector2 OutputPosition
         {
-            get { return (Vector2)outputDoor.transform.position + new Vector2(0.5f, 0); }
+            get { return outputDoor.transform.position; }
         }
     }
 }

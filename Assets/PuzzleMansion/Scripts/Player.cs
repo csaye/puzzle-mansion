@@ -1,6 +1,7 @@
 ﻿using PuzzleMansion.Helper;
 using PuzzleMansion.Objects;
 using PuzzleMansion.UI;
+using System.Collections;
 using UnityEngine;
 
 namespace PuzzleMansion
@@ -17,6 +18,7 @@ namespace PuzzleMansion
         [SerializeField] private Rigidbody2D rb = null;
         [SerializeField] private Transform spriteTransform = null;
         [SerializeField] private Transform doorPoint = null;
+        [SerializeField] private Transform holdPoint = null;
         [SerializeField] private Fade fade = null;
 
         #region KeyCodes
@@ -65,6 +67,7 @@ namespace PuzzleMansion
             Jump();
             Move();
             Up();
+            Hold();
         }
 
         // Jumps
@@ -103,11 +106,11 @@ namespace PuzzleMansion
             // If up key pressed and player grounded
             if (Input.GetKeyDown(upKey) && Grounded)
             {
-                // Check for door
-                Collider2D[] results = Physics2D.OverlapPointAll(doorPoint.position);
-                foreach (Collider2D hitCol in results)
+                // Get all colliders at door point
+                Collider2D[] colliders = Physics2D.OverlapPointAll(doorPoint.position);
+                foreach (Collider2D hitCol in colliders)
                 {
-                    // If found self, continue
+                    // If self, skip collider
                     if (hitCol.gameObject == gameObject) continue;
 
                     // If door component found, open door and break
@@ -120,6 +123,39 @@ namespace PuzzleMansion
                         break;
                     }
                 }
+            }
+        }
+
+        // Attempts to pick up and hold block
+        private void Hold()
+        {
+            // If hold key pressed
+            if (Input.GetKeyDown(holdKey))
+            {
+                // Get all colliders at hold point
+                Collider2D[] colliders = Physics2D.OverlapPointAll(holdPoint.position);
+                foreach (Collider2D hitCol in colliders)
+                {
+                    // If self, skip collider
+                    if (hitCol.gameObject == gameObject) continue;
+
+                    // Start holding block and break
+                    StartCoroutine(HoldBlock(hitCol.gameObject.transform));
+                    break;
+                }
+            }
+        }
+
+        private IEnumerator HoldBlock(Transform blockTransform)
+        {
+            // While hold key pressed
+            while (Input.GetKey(holdKey))
+            {
+                // Wait
+                yield return null;
+
+                // Keep block at hold point
+                blockTransform.position = holdPoint.position;
             }
         }
     }
