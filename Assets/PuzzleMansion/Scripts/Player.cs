@@ -3,6 +3,7 @@ using PuzzleMansion.Objects;
 using PuzzleMansion.UI;
 using System.Collections;
 using UnityEngine;
+// using UnityEngine.SceneManagement;
 
 namespace PuzzleMansion
 {
@@ -60,6 +61,8 @@ namespace PuzzleMansion
 
         private void Update()
         {
+            // if (Input.GetKeyDown("p")) SceneManager.LoadScene("Chapter1");
+
             // Return if paused
             if (PauseManager.Paused) return;
 
@@ -144,15 +147,18 @@ namespace PuzzleMansion
                     if (holdableComponent != null)
                     {
                         // Start holding block and break
-                        StartCoroutine(HoldBlock(hitCol.gameObject.transform, holdableComponent.rb));
+                        StartCoroutine(HoldBlock(hitCol.gameObject.transform, holdableComponent.col, holdableComponent.rb));
                         break;
                     }
                 }
             }
         }
 
-        private IEnumerator HoldBlock(Transform blockTransform, Rigidbody2D blockRigidbody)
+        private IEnumerator HoldBlock(Transform blockTransform, Collider2D blockCollider, Rigidbody2D blockRigidbody)
         {
+            // Disable block collider
+            // blockCollider.enabled = false;
+
             // While hold key pressed
             while (Input.GetKey(holdKey))
             {
@@ -163,8 +169,9 @@ namespace PuzzleMansion
                 blockTransform.position = holdPoint.position;
             }
 
-            // Reset rigidbody velocity on release
+            // Reset rigidbody velocity and collider on release
             blockRigidbody.velocity = Vector2.zero;
+            // blockCollider.enabled = true;
         }
     }
 }
