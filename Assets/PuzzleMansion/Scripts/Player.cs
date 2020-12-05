@@ -113,7 +113,7 @@ namespace PuzzleMansion
                     // If self, skip collider
                     if (hitCol.gameObject == gameObject) continue;
 
-                    // If door component found, open door and break
+                    // If door component found
                     Door doorComponent = hitCol.gameObject.GetComponent<Door>();
                     if (doorComponent != null)
                     {
@@ -139,14 +139,19 @@ namespace PuzzleMansion
                     // If self, skip collider
                     if (hitCol.gameObject == gameObject) continue;
 
-                    // Start holding block and break
-                    StartCoroutine(HoldBlock(hitCol.gameObject.transform));
-                    break;
+                    // If holdable component found
+                    HoldableObject holdableComponent = hitCol.gameObject.GetComponent<HoldableObject>();
+                    if (holdableComponent != null)
+                    {
+                        // Start holding block and break
+                        StartCoroutine(HoldBlock(hitCol.gameObject.transform, holdableComponent.rb));
+                        break;
+                    }
                 }
             }
         }
 
-        private IEnumerator HoldBlock(Transform blockTransform)
+        private IEnumerator HoldBlock(Transform blockTransform, Rigidbody2D blockRigidbody)
         {
             // While hold key pressed
             while (Input.GetKey(holdKey))
@@ -157,6 +162,9 @@ namespace PuzzleMansion
                 // Keep block at hold point
                 blockTransform.position = holdPoint.position;
             }
+
+            // Reset rigidbody velocity on release
+            blockRigidbody.velocity = Vector2.zero;
         }
     }
 }
