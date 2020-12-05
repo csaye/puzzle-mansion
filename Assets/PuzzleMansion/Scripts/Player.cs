@@ -13,6 +13,7 @@ namespace PuzzleMansion
 
         [Header("References")]
         [SerializeField] private Rigidbody2D rb = null;
+        [SerializeField] private Transform spriteTransform = null;
         [SerializeField] private Transform doorPoint = null;
 
         Vector2 currentVelocity = new Vector2();
@@ -21,6 +22,23 @@ namespace PuzzleMansion
         private bool Grounded
         {
             get { return Mathf.Abs(rb.velocity.y) < Operation.epsilon; }
+        }
+
+        // Whether player is facing right
+        private bool _facingRight = true;
+        private bool FacingRight
+        {
+            get { return _facingRight; }
+            set
+            {
+                // Return if value same, otherwise set new value
+                if (value == _facingRight) return;
+                _facingRight = value;
+
+                // Flip sprite to match direction
+                int xScale = FacingRight ? 1 : -1;
+                spriteTransform.localScale = new Vector3(xScale, 1, 1);
+            }
         }
 
         private void Update()
@@ -49,6 +67,10 @@ namespace PuzzleMansion
             if (Input.GetKey(KeyCode.A)) xDirection -= 1;
             if (Input.GetKey(KeyCode.D)) xDirection += 1;
 
+            // Set facing direction
+            if (xDirection == 1) FacingRight = true;
+            else if (xDirection == -1) FacingRight = false;
+
             // Get target velocity from x direction
             Vector2 targetVelocity = new Vector2(xDirection * movementForce, rb.velocity.y);
     
@@ -73,7 +95,7 @@ namespace PuzzleMansion
                     Door doorComponent = hitCol.gameObject.GetComponent<Door>();
                     if (doorComponent != null)
                     {
-                        doorComponent.OpenDoor(this);
+                        transform.position = doorComponent.OutputPosition;
                         break;
                     }
                 }
