@@ -1,4 +1,4 @@
-﻿using PuzzleMansion.Helper;
+﻿using System.Collections.Generic;
 using PuzzleMansion.Objects;
 using PuzzleMansion.UI;
 using System.Collections;
@@ -18,8 +18,8 @@ namespace PuzzleMansion
         [Header("References")]
         [SerializeField] private Rigidbody2D rb = null;
         [SerializeField] private Transform spriteTransform = null;
-        [SerializeField] private Transform doorPoint = null;
-        [SerializeField] private Transform holdPoint = null;
+        [SerializeField] private Transform doorPoint = null, holdPoint = null;
+        [SerializeField] private Collider2D groundCheck = null;
         [SerializeField] private Fade fade = null;
 
         #region KeyCodes
@@ -39,7 +39,18 @@ namespace PuzzleMansion
         // Whether player is currently on the ground
         public bool Grounded
         {
-            get { return Mathf.Abs(rb.velocity.y) < Operation.epsilon; }
+            get
+            {
+                // Check for nontrigger collider in ground check collider
+                List<Collider2D> results = new List<Collider2D>();
+                Physics2D.OverlapCollider(groundCheck, new ContactFilter2D(), results);
+                foreach (Collider2D hitCol in results)
+                {
+                    // If found collider which is not self and not trigger
+                    if (hitCol.gameObject != gameObject && !hitCol.isTrigger) return true;
+                }
+                return false;
+            }
         }
 
         // Whether player is facing right
