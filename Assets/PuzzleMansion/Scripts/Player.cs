@@ -42,8 +42,7 @@ namespace PuzzleMansion
             get
             {
                 // Check for nontrigger collider in ground check collider
-                List<Collider2D> results = new List<Collider2D>();
-                Physics2D.OverlapCollider(groundCheck, new ContactFilter2D(), results);
+                Collider2D[] results = Physics2D.OverlapBoxAll(groundCheck.bounds.center, groundCheck.bounds.size, 0);
                 foreach (Collider2D hitCol in results)
                 {
                     // If found collider which is not self and not trigger
@@ -118,7 +117,7 @@ namespace PuzzleMansion
         private void Up()
         {
             // If up key pressed and player grounded
-            if (Input.GetKeyDown(upKey) && Grounded)
+            if (Input.GetKey(upKey) && Grounded)
             {
                 // Get all colliders at door point
                 Collider2D[] colliders = Physics2D.OverlapPointAll(doorPoint.position);
@@ -168,7 +167,7 @@ namespace PuzzleMansion
         private IEnumerator HoldBlock(Transform blockTransform, Collider2D blockCollider, Rigidbody2D blockRigidbody)
         {
             // Disable block collider
-            // blockCollider.enabled = false;
+            blockCollider.enabled = false;
 
             // While hold key pressed
             while (Input.GetKey(holdKey))
@@ -182,7 +181,7 @@ namespace PuzzleMansion
 
             // Reset rigidbody velocity and collider on release
             blockRigidbody.velocity = Vector2.zero;
-            // blockCollider.enabled = true;
+            blockCollider.enabled = true;
         }
     }
 }
