@@ -1,4 +1,4 @@
-﻿namespace PuzzleMansion
+﻿namespace PuzzleMansion.Helper
 {
     public class Operation
     {

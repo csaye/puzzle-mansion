@@ -1,4 +1,6 @@
-﻿using PuzzleMansion.Objects;
+﻿using PuzzleMansion.Helper;
+using PuzzleMansion.Objects;
+using PuzzleMansion.UI;
 using UnityEngine;
 
 namespace PuzzleMansion
@@ -15,6 +17,7 @@ namespace PuzzleMansion
         [SerializeField] private Rigidbody2D rb = null;
         [SerializeField] private Transform spriteTransform = null;
         [SerializeField] private Transform doorPoint = null;
+        [SerializeField] private Fade fade = null;
 
         Vector2 currentVelocity = new Vector2();
 
@@ -43,6 +46,10 @@ namespace PuzzleMansion
 
         private void Update()
         {
+            // Return if paused
+            if (PauseManager.Paused) return;
+
+            // Act on inputs
             Jump();
             Move();
             Up();
@@ -95,7 +102,7 @@ namespace PuzzleMansion
                     Door doorComponent = hitCol.gameObject.GetComponent<Door>();
                     if (doorComponent != null)
                     {
-                        transform.position = doorComponent.OutputPosition;
+                        fade.StartFade(doorComponent.OutputPosition);
                         break;
                     }
                 }
