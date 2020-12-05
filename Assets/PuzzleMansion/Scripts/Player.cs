@@ -73,7 +73,7 @@ namespace PuzzleMansion
                     Door doorComponent = hitCol.gameObject.GetComponent<Door>();
                     if (doorComponent != null)
                     {
-                        doorComponent.OpenDoor();
+                        doorComponent.OpenDoor(this);
                         break;
                     }
                 }

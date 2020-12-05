@@ -4,9 +4,12 @@ namespace PuzzleMansion.Objects
 {
     public class Door : MonoBehaviour
     {
-        public void OpenDoor()
+        [Header("References")]
+        [SerializeField] private Door outputDoor = null;
+
+        public void OpenDoor(Player player)
         {
-            Debug.Log($"Opening door at {transform.position}");
+            player.transform.position = outputDoor.transform.position;
         }
     }
 }
