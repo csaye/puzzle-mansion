@@ -19,6 +19,18 @@ namespace PuzzleMansion
         [SerializeField] private Transform doorPoint = null;
         [SerializeField] private Fade fade = null;
 
+        #region KeyCodes
+
+        private const KeyCode jumpKey = KeyCode.C;
+        private const KeyCode holdKey = KeyCode.X;
+
+        private const KeyCode upKey = KeyCode.UpArrow;
+        private const KeyCode downKey = KeyCode.DownArrow;
+        private const KeyCode rightKey = KeyCode.RightArrow;
+        private const KeyCode leftKey = KeyCode.LeftArrow;
+
+        #endregion
+
         Vector2 currentVelocity = new Vector2();
 
         // Whether player is currently on the ground
@@ -59,7 +71,7 @@ namespace PuzzleMansion
         private void Jump()
         {
             // If jump key pressed and player grounded
-            if (Input.GetKeyDown(KeyCode.Space) && Grounded)
+            if (Input.GetKeyDown(jumpKey) && Grounded)
             {
                 // Add jump force
                 rb.AddForce(new Vector2(0, jumpForce));
@@ -71,8 +83,8 @@ namespace PuzzleMansion
         {
             // Get x direction from left and right keys
             int xDirection = 0;
-            if (Input.GetKey(KeyCode.A)) xDirection -= 1;
-            if (Input.GetKey(KeyCode.D)) xDirection += 1;
+            if (Input.GetKey(leftKey)) xDirection -= 1;
+            if (Input.GetKey(rightKey)) xDirection += 1;
 
             // Set facing direction
             if (xDirection == 1) FacingRight = true;
@@ -89,7 +101,7 @@ namespace PuzzleMansion
         private void Up()
         {
             // If up key pressed and player grounded
-            if (Input.GetKeyDown(KeyCode.W) && Grounded)
+            if (Input.GetKeyDown(upKey) && Grounded)
             {
                 // Check for door
                 Collider2D[] results = Physics2D.OverlapPointAll(doorPoint.position);
@@ -102,6 +114,8 @@ namespace PuzzleMansion
                     Door doorComponent = hitCol.gameObject.GetComponent<Door>();
                     if (doorComponent != null)
                     {
+                        // Reset velocity and start fade to output position
+                        rb.velocity = Vector2.zero;
                         fade.StartFade(doorComponent.OutputPosition);
                         break;
                     }
