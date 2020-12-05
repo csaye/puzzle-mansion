@@ -37,7 +37,7 @@ namespace PuzzleMansion
         Vector2 currentVelocity = new Vector2();
 
         // Whether player is currently on the ground
-        private bool Grounded
+        public bool Grounded
         {
             get { return Mathf.Abs(rb.velocity.y) < Operation.epsilon; }
         }
