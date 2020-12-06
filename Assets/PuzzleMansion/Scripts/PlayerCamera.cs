@@ -5,6 +5,7 @@ namespace PuzzleMansion
     public class PlayerCamera : MonoBehaviour
     {
         [Header("Attributes")]
+        [SerializeField] private bool restrictView = false;
         [SerializeField] private Vector2 minView = new Vector2();
         [SerializeField] private Vector2 maxView = new Vector2();
 
@@ -21,6 +22,13 @@ namespace PuzzleMansion
         {
             // Get focus position
             Vector2 focusPosition = cameraFocusTransform.position;
+
+            // If not restricting view, set position and return
+            if (!restrictView)
+            {
+                transform.position = new Vector3(focusPosition.x, focusPosition.y, transform.position.z);
+                return;
+            }
 
             // Get minimum and maximum world points on screen
             Vector2 screenMin = playerCamera.ScreenToWorldPoint(new Vector2(0, 0));
