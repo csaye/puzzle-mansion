@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using PuzzleMansion.UI;
 using PuzzleMansion.Objects;
-using PuzzleMansion.UI;
 using System.Collections;
 using UnityEngine;
-// using UnityEngine.SceneManagement;
 
 namespace PuzzleMansion
 {
@@ -20,7 +18,6 @@ namespace PuzzleMansion
         [SerializeField] private Transform spriteTransform = null;
         [SerializeField] private Transform doorPoint = null, holdPoint = null;
         [SerializeField] private Collider2D groundCheck = null;
-        [SerializeField] private Fade fade = null;
 
         #region KeyCodes
 
@@ -67,6 +64,13 @@ namespace PuzzleMansion
                 int xScale = FacingRight ? 1 : -1;
                 spriteTransform.localScale = new Vector3(xScale, 1, 1);
             }
+        }
+
+        public static Player instance;
+        
+        private void Awake()
+        {
+            if (instance == null) instance = this;
         }
 
         private void Update()
@@ -132,7 +136,7 @@ namespace PuzzleMansion
                     {
                         // Reset velocity and start fade to output position
                         rb.velocity = Vector2.zero;
-                        fade.StartFade(doorComponent.OutputPosition);
+                        Fade.instance.StartFade(doorComponent.OutputPosition);
                         break;
                     }
                 }

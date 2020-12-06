@@ -1,6 +1,6 @@
 ﻿using PuzzleMansion.Helper;
 using UnityEngine;
-// using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace PuzzleMansion.UI
 {
@@ -8,9 +8,15 @@ namespace PuzzleMansion.UI
     {
         [Header("References")]
         [SerializeField] private Animator animator;
-        [SerializeField] private Transform playerTransform;
 
         private Vector2 nextPosition;
+
+        public static Fade instance;
+
+        private void Awake()
+        {
+            if (instance == null) instance = this;
+        }
 
         // Starts fade to move player to given position
         public void StartFade(Vector2 position)
@@ -23,17 +29,8 @@ namespace PuzzleMansion.UI
             animator.SetTrigger(AnimatorHash.Fade);
         }
 
-        // Moves player to next position
-        public void MovePlayer()
-        {
-            playerTransform.position = nextPosition;
-        }
-
-        // Called when animation completes
-        public void EndFade()
-        {
-            // Unpause
-            PauseManager.Paused = false;
-        }
+        private void ReloadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reloads current scene
+        private void MovePlayer() => Player.instance.transform.position = nextPosition; // Moves player to next position
+        private void EndFade() => PauseManager.Paused = false; // Unpause when animation completes
     }
 }
