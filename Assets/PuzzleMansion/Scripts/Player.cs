@@ -15,19 +15,19 @@ namespace PuzzleMansion
 
         [Header("References")]
         [SerializeField] private Rigidbody2D rb = null;
-        [SerializeField] private Transform spriteTransform = null;
+        // [SerializeField] private Transform spriteTransform = null;
         [SerializeField] private Transform doorPoint = null, holdPoint = null;
         [SerializeField] private Collider2D groundCheck = null;
 
         #region KeyCodes
 
-        private const KeyCode jumpKey = KeyCode.C;
-        private const KeyCode holdKey = KeyCode.X;
+        private const KeyCode jumpKey = KeyCode.Space;
+        private const KeyCode holdKey = KeyCode.LeftShift;
 
-        private const KeyCode upKey = KeyCode.UpArrow;
-        private const KeyCode downKey = KeyCode.DownArrow;
-        private const KeyCode rightKey = KeyCode.RightArrow;
-        private const KeyCode leftKey = KeyCode.LeftArrow;
+        private const KeyCode upKey = KeyCode.W;
+        private const KeyCode downKey = KeyCode.S;
+        private const KeyCode rightKey = KeyCode.D;
+        private const KeyCode leftKey = KeyCode.A;
 
         #endregion
 
@@ -50,21 +50,21 @@ namespace PuzzleMansion
         }
 
         // Whether player is facing right
-        private bool _facingRight = true;
-        private bool FacingRight
-        {
-            get { return _facingRight; }
-            set
-            {
-                // Return if value same, otherwise set new value
-                if (value == _facingRight) return;
-                _facingRight = value;
+        // private bool _facingRight = true;
+        // private bool FacingRight
+        // {
+        //     get { return _facingRight; }
+        //     set
+        //     {
+        //         // Return if value same, otherwise set new value
+        //         if (value == _facingRight) return;
+        //         _facingRight = value;
 
-                // Flip sprite to match direction
-                int xScale = FacingRight ? 1 : -1;
-                spriteTransform.localScale = new Vector3(xScale, 1, 1);
-            }
-        }
+        //         // Flip sprite to match direction
+        //         int xScale = FacingRight ? 1 : -1;
+        //         spriteTransform.localScale = new Vector3(xScale, 1, 1);
+        //     }
+        // }
 
         public static Player instance;
         
@@ -107,8 +107,8 @@ namespace PuzzleMansion
             if (Input.GetKey(rightKey)) xDirection += 1;
 
             // Set facing direction
-            if (xDirection == 1) FacingRight = true;
-            else if (xDirection == -1) FacingRight = false;
+            // if (xDirection == 1) FacingRight = true;
+            // else if (xDirection == -1) FacingRight = false;
 
             // Get target velocity from x direction
             Vector2 targetVelocity = new Vector2(xDirection * movementForce, rb.velocity.y);
