@@ -5,7 +5,7 @@ namespace PuzzleMansion
     public class PauseManager : MonoBehaviour
     {
         private static bool _paused = false;
-        public static bool Paused
+        public static bool paused
         {
             get { return _paused; }
             set
@@ -15,13 +15,13 @@ namespace PuzzleMansion
                 _paused = value;
                 
                 // Change time scale based on paused status
-                Time.timeScale = Paused ? 0 : 1;
+                Time.timeScale = paused ? 0 : 1;
             }
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape)) Paused = !Paused;
+            if (Input.GetKeyDown(KeyCode.Escape)) paused = !paused;
         }
     }
 }

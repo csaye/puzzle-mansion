@@ -15,7 +15,7 @@ namespace PuzzleMansion
 
         [Header("References")]
         [SerializeField] private Rigidbody2D rb = null;
-        // [SerializeField] private Transform spriteTransform = null;
+        [SerializeField] private Animator animator = null;
         [SerializeField] private Transform doorPoint = null, holdPoint = null;
         [SerializeField] private Collider2D groundCheck = null;
 
@@ -34,7 +34,7 @@ namespace PuzzleMansion
         Vector2 currentVelocity = new Vector2();
 
         // Whether player is currently on the ground
-        public bool Grounded
+        public bool grounded
         {
             get
             {
@@ -50,21 +50,20 @@ namespace PuzzleMansion
         }
 
         // Whether player is facing right
-        // private bool _facingRight = true;
-        // private bool FacingRight
-        // {
-        //     get { return _facingRight; }
-        //     set
-        //     {
-        //         // Return if value same, otherwise set new value
-        //         if (value == _facingRight) return;
-        //         _facingRight = value;
+        private bool _facingRight = true;
+        private bool facingRight
+        {
+            get { return _facingRight; }
+            set
+            {
+                // Return if value same, otherwise set new value
+                if (value == _facingRight) return;
+                _facingRight = value;
 
-        //         // Flip sprite to match direction
-        //         int xScale = FacingRight ? 1 : -1;
-        //         spriteTransform.localScale = new Vector3(xScale, 1, 1);
-        //     }
-        // }
+                // Set animator
+                animator.SetBool("FacingRight", facingRight);
+            }
+        }
 
         public static Player instance;
         
@@ -75,10 +74,8 @@ namespace PuzzleMansion
 
         private void Update()
         {
-            // if (Input.GetKeyDown("p")) SceneManager.LoadScene("Chapter1");
-
             // Return if paused
-            if (PauseManager.Paused) return;
+            if (PauseManager.paused) return;
 
             // Act on inputs
             Jump();
@@ -91,7 +88,7 @@ namespace PuzzleMansion
         private void Jump()
         {
             // If jump key pressed and player grounded
-            if (Input.GetKeyDown(jumpKey) && Grounded)
+            if (Input.GetKeyDown(jumpKey) && grounded)
             {
                 // Add jump force
                 rb.AddForce(new Vector2(0, jumpForce));
@@ -107,21 +104,24 @@ namespace PuzzleMansion
             if (Input.GetKey(rightKey)) xDirection += 1;
 
             // Set facing direction
-            // if (xDirection == 1) FacingRight = true;
-            // else if (xDirection == -1) FacingRight = false;
+            if (xDirection == 1) facingRight = true;
+            else if (xDirection == -1) facingRight = false;
 
             // Get target velocity from x direction
             Vector2 targetVelocity = new Vector2(xDirection * movementForce, rb.velocity.y);
     
             // Smooth damp velocity based on target velocity
             rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, smoothTime, maxSpeed);
+
+            // Set animator
+            animator.SetBool("Moving", Mathf.Abs(rb.velocity.magnitude) > 0.1f); 
         }
 
         // Checks door entry on up key press
         private void Up()
         {
             // If up key pressed and player grounded
-            if (Input.GetKey(upKey) && Grounded)
+            if (Input.GetKey(upKey) && grounded)
             {
                 // Get all colliders at door point
                 Collider2D[] colliders = Physics2D.OverlapPointAll(doorPoint.position);
@@ -170,6 +170,9 @@ namespace PuzzleMansion
 
         private IEnumerator HoldBlock(Transform blockTransform, Collider2D blockCollider, Rigidbody2D blockRigidbody)
         {
+            // Set animator
+            animator.SetBool("Holding", true);
+
             // Disable block collider
             blockCollider.enabled = false;
 
@@ -186,6 +189,9 @@ namespace PuzzleMansion
             // Reset rigidbody velocity and collider on release
             blockRigidbody.velocity = Vector2.zero;
             blockCollider.enabled = true;
+
+            // Set animator
+            animator.SetBool("Holding", false);
         }
     }
 }

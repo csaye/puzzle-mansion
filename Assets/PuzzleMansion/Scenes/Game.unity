@@ -175,7 +175,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0.06970649, b: 0.1792453, a: 0}
+  m_BackGroundColor: {r: 0.26179245, g: 0.29593927, b: 0.3490566, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1356,6 +1356,7 @@ GameObject:
   - component: {fileID: 2048410899}
   - component: {fileID: 2048410898}
   - component: {fileID: 2048410896}
+  - component: {fileID: 2048410901}
   - component: {fileID: 2048410900}
   m_Layer: 0
   m_Name: Player
@@ -1497,9 +1498,29 @@ MonoBehaviour:
   jumpForce: 700
   movementForce: 7
   rb: {fileID: 2048410899}
+  animator: {fileID: 2048410901}
   doorPoint: {fileID: 1189510835}
   holdPoint: {fileID: 797362540}
   groundCheck: {fileID: 9103724764390446053}
+--- !u!95 &2048410901
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048410895}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0e1424851748849659e038ec243c08ee, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &508412416158493565
 PrefabInstance:
   m_ObjectHideFlags: 0

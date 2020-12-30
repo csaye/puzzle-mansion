@@ -25,12 +25,12 @@ namespace PuzzleMansion.UI
             nextPosition = position;
 
             // Pause and start fade animation
-            PauseManager.Paused = true;
+            PauseManager.paused = true;
             animator.SetTrigger(AnimatorHash.Fade);
         }
 
         private void ReloadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reloads current scene
         private void MovePlayer() => Player.instance.transform.position = nextPosition; // Moves player to next position
-        private void EndFade() => PauseManager.Paused = false; // Unpause when animation completes
+        private void EndFade() => PauseManager.paused = false; // Unpause when animation completes
     }
 }
