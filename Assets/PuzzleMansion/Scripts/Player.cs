@@ -194,7 +194,7 @@ namespace PuzzleMansion
             holding = true;
 
             // Disable block collider
-            blockCollider.enabled = false;
+            // blockCollider.enabled = false;
 
             // While hold key pressed
             while (Input.GetKey(holdKey))
@@ -208,7 +208,7 @@ namespace PuzzleMansion
 
             // Reset rigidbody velocity and collider on release
             blockRigidbody.velocity = rb.velocity;
-            blockCollider.enabled = true;
+            // blockCollider.enabled = true;
 
             holding = false;
         }
