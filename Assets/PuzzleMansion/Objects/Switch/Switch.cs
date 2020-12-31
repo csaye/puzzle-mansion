@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace PuzzleMansion.Objects
 {
-    public class Spring : MonoBehaviour
+    public class Switch : MonoBehaviour
     {
-        [Header("Attributes")]
-        [SerializeField] private int springForce = 0;
+        public static event Action onSwitch;
 
         private void OnTriggerEnter2D(Collider2D col)
         {
@@ -14,7 +14,7 @@ namespace PuzzleMansion.Objects
             if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic)
             {
                 rb.velocity = new Vector2(rb.velocity.x, 0); // Reset y velocity
-                rb.AddForce(new Vector2(0, springForce)); // Add spring force
+                onSwitch?.Invoke(); // Trigger switch
             }
         }
     }
