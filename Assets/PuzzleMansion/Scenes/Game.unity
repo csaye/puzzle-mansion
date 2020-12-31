@@ -160,7 +160,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdbde0bc6c8b14bce8ec9cc98d48589e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpTime: 1
+  restrictView: 0
+  minView: {x: -20, y: -10}
+  maxView: {x: 20, y: 10}
+  playerCamera: {fileID: 519420031}
+  cameraFocusTransform: {fileID: 1420272716}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -2095,6 +2099,7 @@ MonoBehaviour:
   animator: {fileID: 2048410901}
   doorPoint: {fileID: 1189510835}
   holdPoint: {fileID: 797362540}
+  pickupPoint: {fileID: 797362540}
   groundCheck: {fileID: 9103724764390446053}
 --- !u!95 &2048410901
 Animator:

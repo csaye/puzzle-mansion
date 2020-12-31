@@ -62,6 +62,27 @@ namespace PuzzleMansion
 
                 // Set animator
                 animator.SetBool("FacingRight", facingRight);
+
+                // Set local hold point x
+                Vector3 pos = holdPoint.transform.localPosition;
+                float x = facingRight ? 1 : -1;
+                holdPoint.transform.localPosition = new Vector3(x, pos.y, pos.z);
+            }
+        }
+
+        // Whether player is holding an object
+        private bool _holding = false;
+        private bool holding
+        {
+            get { return _holding; }
+            set
+            {
+                // Return if value same, otherwise set new value
+                if (value == _holding) return;
+                _holding = value;
+
+                // Set animator
+                animator.SetBool("Holding", holding);
             }
         }
 
@@ -146,8 +167,8 @@ namespace PuzzleMansion
         // Attempts to pick up and hold block
         private void Hold()
         {
-            // If hold key pressed
-            if (Input.GetKeyDown(holdKey))
+            // If not already holding and hold key pressed
+            if (!holding && Input.GetKey(holdKey))
             {
                 // Get all colliders at hold point
                 Collider2D[] colliders = Physics2D.OverlapPointAll(holdPoint.position);
@@ -170,8 +191,7 @@ namespace PuzzleMansion
 
         private IEnumerator HoldBlock(Transform blockTransform, Collider2D blockCollider, Rigidbody2D blockRigidbody)
         {
-            // Set animator
-            animator.SetBool("Holding", true);
+            holding = true;
 
             // Disable block collider
             blockCollider.enabled = false;
@@ -187,11 +207,10 @@ namespace PuzzleMansion
             }
 
             // Reset rigidbody velocity and collider on release
-            blockRigidbody.velocity = Vector2.zero;
+            blockRigidbody.velocity = rb.velocity;
             blockCollider.enabled = true;
 
-            // Set animator
-            animator.SetBool("Holding", false);
+            holding = false;
         }
     }
 }
