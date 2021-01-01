@@ -157,7 +157,7 @@ namespace PuzzleMansion
                     {
                         // Reset velocity and start fade to output position
                         rb.velocity = Vector2.zero;
-                        Fade.instance.StartFade(doorComponent.OutputPosition);
+                        doorComponent.EnterDoor();
                         break;
                     }
                 }

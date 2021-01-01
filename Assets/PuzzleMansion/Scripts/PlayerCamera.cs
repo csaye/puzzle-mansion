@@ -2,16 +2,33 @@
 
 namespace PuzzleMansion
 {
+    [System.Serializable]
+    public struct CameraView
+    {
+        public Vector2 min;
+        public Vector2 max;
+    }
+
     public class PlayerCamera : MonoBehaviour
     {
         [Header("Attributes")]
-        [SerializeField] private bool restrictView = false;
-        [SerializeField] private Vector2 minView = new Vector2();
-        [SerializeField] private Vector2 maxView = new Vector2();
+        [SerializeField] private CameraView cameraView = new CameraView();
 
         [Header("References")]
         [SerializeField] private Camera playerCamera = null;
         [SerializeField] private Transform cameraFocusTransform = null;
+
+        public static PlayerCamera instance;
+
+        private void Awake()
+        {
+            instance = this;
+        }
+
+        public void SetCameraView(CameraView _cameraView)
+        {
+            cameraView = _cameraView;
+        }
 
         private void Update()
         {
@@ -23,30 +40,24 @@ namespace PuzzleMansion
             // Get focus position
             Vector2 focusPosition = cameraFocusTransform.position;
 
-            // If not restricting view, set position and return
-            if (!restrictView)
-            {
-                transform.position = new Vector3(focusPosition.x, focusPosition.y, transform.position.z);
-                return;
-            }
-
             // Get minimum and maximum world points on screen
             Vector2 screenMin = playerCamera.ScreenToWorldPoint(new Vector2(0, 0));
             Vector2 screenMax = playerCamera.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
 
             // Get minimum and maximum camera positions
-            float minX = transform.position.x + (minView.x - screenMin.x);
-            float maxX = transform.position.x + (maxView.x - screenMax.x);
-            float minY = transform.position.y + (minView.y - screenMin.y);
-            float maxY = transform.position.y + (maxView.y - screenMax.y);
+            float minX = transform.position.x + (cameraView.min.x - screenMin.x);
+            float maxX = transform.position.x + (cameraView.max.x - screenMax.x);
+            float minY = transform.position.y + (cameraView.min.y - screenMin.y);
+            float maxY = transform.position.y + (cameraView.max.y - screenMax.y);
 
             // Clamp camera view to be within min and max range
             float x = Mathf.Clamp(focusPosition.x, minX, maxX);
             float y = Mathf.Clamp(focusPosition.y, minY, maxY);
 
             // If camera out of bounds, set to center
-            if (screenMax.x - screenMin.x > maxView.x - minView.x) x = 0;
-            if (screenMax.y - screenMin.y > maxView.y - minView.y) y = 0;
+            Vector2 midpoint = (cameraView.max - cameraView.min) / 2;
+            if (screenMax.x - screenMin.x > cameraView.max.x - cameraView.min.x) x = midpoint.x;
+            if (screenMax.y - screenMin.y > cameraView.max.y - cameraView.min.y) y = midpoint.y;
 
             // Move camera to position
             transform.position = new Vector3(x, y, transform.position.z);

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PuzzleMansion.UI;
+using UnityEngine;
 
 namespace PuzzleMansion.Objects
 {
@@ -6,10 +7,17 @@ namespace PuzzleMansion.Objects
     {
         [Header("Attributes")]
         [SerializeField] private Door outputDoor = null;
+        [SerializeField] private CameraView cameraView = new CameraView();
 
-        public Vector2 OutputPosition
+        public Vector2 outputPosition
         {
             get { return outputDoor.transform.position; }
+        }
+
+        public void EnterDoor()
+        {
+            // Start fade to output position and view
+            Fade.instance.StartFade(outputPosition, cameraView);
         }
     }
 }
